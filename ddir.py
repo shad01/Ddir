@@ -1,42 +1,44 @@
 import requests
 import sys
 
-def banner():
-    print("""
-               /$$$$$$$  /$$$$$$$  /$$$$$$ /$$$$$$$
-              | $$__  $$| $$__  $$|_  $$_/| $$__  $$
-              | $$  \ $$| $$  \ $$  | $$  | $$  \ $$
-              | $$  | $$| $$  | $$  | $$  | $$$$$$$/
-              | $$  | $$| $$  | $$  | $$  | $$__  $$
-              | $$  | $$| $$  | $$  | $$  | $$  \ $$
-              | $$$$$$$/| $$$$$$$/ /$$$$$$| $$  | $$
-              |_______/ |_______/ |______/|__/  |__/  """)
+if len(sys.argv) < 3:
     print()
+    print('[+]  python ddir.py https://www.site.com/  wordlist.txt [+]')
+    print()
+    sys.exit()
 
-def diretorio():
-    if len(sys.argv) < 3:
-        print()
-        print("[+]  python ddir.py https://www.site.com/ wordlist.txt [+]")
-        print()
+print('''
+        /$$$$$$$  /$$$$$$$  /$$$$$$ /$$$$$$$
+        | $$__  $$| $$__  $$|_  $$_/| $$__  $$
+        | $$  \ $$| $$  \ $$  | $$  | $$  \ $$
+        | $$  | $$| $$  | $$  | $$  | $$$$$$$/
+        | $$  | $$| $$  | $$  | $$  | $$__  $$
+        | $$  | $$| $$  | $$  | $$  | $$  \ $$
+        | $$$$$$$/| $$$$$$$/ /$$$$$$| $$  | $$
+        |_______/ |_______/ |______/|__/  |__/  ''')
+print()
+   
 
-    else:
-        with open(sys.argv[2], encoding="utf-8") as f:
+def diretorio(site, arquivo):
+        with open(arquivo, encoding='utf-8') as f:
             paginas = f.readlines()
 
         for pagina in paginas:
             try:
-                pagina = pagina.replace("\n", "")
-                url = sys.argv[1] + pagina
-                site = requests.get(url)
-            
-                if site.status_code == 200:
-                    print(f"\033[1;32mPAGINA ENCONTRADA: {url}\033[m")
+                dire = pagina.replace('\n', '')
+                url = site + dire
+                r_site = requests.get(url)
 
-                else:
-                    print(f"PAGINA NÃO ENCONTRADA: {url}")
+                if r_site.status_code == 200:
+                    print(f'[+] PAGINA ENCONTRADA: {url} [+]')
+
+                elif r_site.status_code != 200:
+                    print(f'PAGINA NÃO ENCONTRADA: {url}')
 
             except KeyboardInterrupt:
-                sys.exit()
+                print('SAINDO DO DDIR')
 
-banner()
-diretorio()
+
+www = sys.argv[1]
+wordlist = sys.argv[2]
+diretorio(site=www, arquivo=wordlist)
